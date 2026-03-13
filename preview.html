@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Gran Sorteo Anual</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#2c3e50,#3498db);
+    color:white;
+    text-align:center;
+    margin:0;
+    padding:0;
+}
+
+.container{
+    margin-top:80px;
+}
+
+input{
+    display:block;
+    margin:10px auto;
+    padding:10px;
+    width:250px;
+    border:none;
+    border-radius:5px;
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    background:#f1c40f;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#f39c12;
+}
+
+#codigoSection,
+#verificandoSection,
+#premioSection{
+    display:none;
+}
+
+#barra{
+    width:0%;
+    height:25px;
+    background:#2ecc71;
+}
+
+#contenedorBarra{
+    width:300px;
+    margin:20px auto;
+    background:#555;
+    border-radius:5px;
+    overflow:hidden;
+}
+
+img{
+    margin-top:30px;
+    max-width:350px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎉 Gran Sorteo Promocional 🎉</h1>
+
+<div id="formSection">
+
+<h2>Registro de participante</h2>
+
+<input id="nombre" placeholder="Nombre completo">
+<input id="direccion" placeholder="Dirección">
+<input id="telefono" placeholder="Teléfono">
+
+<button onclick="enviarDatos()">Participar</button>
+
+</div>
+
+
+<div id="codigoSection">
+
+<h2>Introduce tu código de premio</h2>
+
+<input id="codigo" placeholder="Código promocional">
+<button onclick="comprobarCodigo()">Canjear premio</button>
+
+</div>
+
+
+<div id="verificandoSection">
+
+<h2 id="mensajeVerificacion">Verificando datos...</h2>
+
+<div id="contenedorBarra">
+<div id="barra"></div>
+</div>
+
+</div>
+
+
+<div id="premioSection">
+
+<h1>🎊 ¡FELICIDADES! 🎊</h1>
+
+<p>Has ganado el siguiente premio:</p>
+
+<img src="premio.png">
+
+</div>
+
+</div>
+
+
+<script>
+
+function enviarDatos(){
+
+    const nombre = document.getElementById("nombre").value
+    const direccion = document.getElementById("direccion").value
+    const telefono = document.getElementById("telefono").value
+
+    const datos = {
+        nombre,
+        direccion,
+        telefono
+    }
+
+    localStorage.setItem("datosParticipante", JSON.stringify(datos))
+
+    document.getElementById("formSection").style.display="none"
+    document.getElementById("codigoSection").style.display="block"
+
+}
+
+
+function comprobarCodigo(){
+
+    const codigo = document.getElementById("codigo").value
+
+    if(codigo !== "DEGOLONGO-PRIME-777"){
+        alert("Código incorrecto")
+        return
+    }
+
+    document.getElementById("codigoSection").style.display="none"
+    document.getElementById("verificandoSection").style.display="block"
+
+    iniciarVerificacion()
+
+}
+
+
+function iniciarVerificacion(){
+
+    const mensajes = [
+        "Validando identidad...",
+        "Comprobando base de datos internacional...",
+        "Verificando elegibilidad...",
+        "Confirmando premio...",
+        "Preparando recompensa..."
+    ]
+
+    let progreso = 0
+    let pasoMensaje = 0
+
+    const barra = document.getElementById("barra")
+    const mensaje = document.getElementById("mensajeVerificacion")
+
+    const intervalo = setInterval(() => {
+
+        progreso += 5
+        barra.style.width = progreso + "%"
+
+        if(progreso % 20 === 0 && pasoMensaje < mensajes.length){
+            mensaje.innerText = mensajes[pasoMensaje]
+            pasoMensaje++
+        }
+
+        if(progreso >= 100){
+            clearInterval(intervalo)
+            mostrarPremio()
+        }
+
+    },150)
+
+}
+
+
+function mostrarPremio(){
+
+    document.getElementById("verificandoSection").style.display="none"
+    document.getElementById("premioSection").style.display="block"
+
+}
+
+</script>
+
+</body>
+</html>
