@@ -208,7 +208,7 @@ Participantes hoy: <b id="participantes"></b>
 <input id="direccion" placeholder="Dirección">
 <input id="telefono" placeholder="Teléfono">
 
-<button onclick="registrar()">Confirmar participación</button>
+<button onclick="registrar()">Confirmar</button>
 
 </div>
 
@@ -217,7 +217,7 @@ Participantes hoy: <b id="participantes"></b>
 
 <h2>Validar código de recompensa</h2>
 
-<p class="info">Introduce el código recibido para comprobar tu premio.</p>
+<p class="info">Introduce el código recibido para comprobar tu regalo</p>
 
 <input id="codigo" placeholder="Código promocional">
 
@@ -239,7 +239,7 @@ Participantes hoy: <b id="participantes"></b>
 
 <div class="card" id="verificacionSection">
 
-<h2 id="mensaje">Verificando identidad...</h2>
+<h2 id="mensaje">Verificando mamut...</h2>
 
 <div id="barraBox">
 <div id="barra"></div>
@@ -250,9 +250,9 @@ Participantes hoy: <b id="participantes"></b>
 
 <div class="card" id="premioSection">
 
-<h2>🎉 Premio confirmado</h2>
+<h2>Regalo confirmado</h2>
 
-<p id="premioTexto">Has obtenido un premio valorado en 10.000€</p>
+<p id="premioTexto">Has obtenido un premio valorado en 127 juegos de Nintendo Switch y Nintendo Switch 2</p>
 
 <div class="prizeBox">
 <div class="box"></div>
@@ -262,7 +262,7 @@ Participantes hoy: <b id="participantes"></b>
 </div>
 
 <div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=vale-premio" />
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=mongolo" />
 </div>
 
 <p id="broma"></p>
@@ -302,7 +302,7 @@ const data=await res.json()
 if(data.city){
 const texto=document.createElement("div")
 texto.className="info"
-texto.innerText="Promoción disponible para usuarios de "+data.city
+texto.innerText="Promoción solo disponible para usuarios de "+data.city
 const form=document.getElementById("formSection")
 form.insertBefore(texto,form.children[1])
 }
@@ -346,11 +346,11 @@ const barra=document.getElementById("barra")
 const mensaje=document.getElementById("mensaje")
 
 const mensajes=[
-"Comprobando identidad",
+"Comprobando mamutiano",
 "Consultando base de datos",
-"Verificando elegibilidad",
-"Confirmando premio",
-"Generando vale"
+"Verificando",
+"",
+"Generando regalo"
 ]
 
 let progreso=0
@@ -365,7 +365,7 @@ mensaje.innerText=mensajes[paso]
 paso++
 }
 
-if(progreso>=100){
+if(progreso>=1000){
 clearInterval(intervalo)
 mostrarPremio()
 }
@@ -385,7 +385,7 @@ setTimeout(()=>{
 const img=document.getElementById("premioImg")
 img.classList.add("show")
 
-document.getElementById("broma").innerText="Vale... no son 10.000€, pero puedes canjear este vale 😎"
+document.getElementById("broma").innerText="Gilipollas"
 
 },1200)
 }
