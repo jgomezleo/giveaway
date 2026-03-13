@@ -8,36 +8,42 @@
 <style>
 
 body{
-font-family: "Segoe UI", Arial, sans-serif;
-background:#f4f6f9;
+font-family:"Segoe UI",Arial,sans-serif;
 margin:0;
-color:#2c3e50;
+color:#1f2937;
+background: radial-gradient(circle at top,#eef2ff,#f8fafc 60%,#ffffff);
+min-height:100vh;
 }
 
 header{
-background:#0a2540;
+background:rgba(10,25,47,0.9);
+backdrop-filter:blur(10px);
 color:white;
-padding:20px;
+padding:18px;
 text-align:center;
-font-size:22px;
 font-weight:600;
+letter-spacing:0.5px;
+box-shadow:0 4px 20px rgba(0,0,0,0.15);
+}
+
+.logo{
+font-size:20px;
 }
 
 .container{
-max-width:420px;
+max-width:440px;
 margin:40px auto;
+padding:10px;
 }
 
 .card{
 background:white;
-border-radius:12px;
+border-radius:14px;
 padding:30px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+box-shadow:0 15px 40px rgba(0,0,0,0.08);
 }
 
-h2{
-margin-top:0;
-}
+h2{margin-top:0}
 
 input{
 width:100%;
@@ -52,52 +58,61 @@ button{
 width:100%;
 padding:12px;
 margin-top:15px;
-background:#0077ff;
+background:#2563eb;
 border:none;
 color:white;
 font-weight:600;
 border-radius:6px;
 cursor:pointer;
+transition:.2s;
 }
 
-button:hover{
-background:#005fd1;
-}
-
-.info{
-font-size:14px;
-color:#777;
-margin-bottom:15px;
-}
+button:hover{background:#1d4ed8}
 
 .badge{
-background:#e8f1ff;
-padding:8px 12px;
+background:#eef2ff;
+padding:7px 12px;
 border-radius:20px;
 font-size:13px;
 display:inline-block;
-margin-bottom:10px;
+margin-bottom:15px;
 }
 
-#codigoSection,#ruletaSection,#verificacionSection,#premioSection{
-display:none;
+.counter{
+font-size:14px;
+margin-bottom:18px;
 }
 
-.ruleta{
-font-size:60px;
-animation:giro 1s linear infinite;
-text-align:center;
+.info{
+font-size:13px;
+color:#6b7280;
 }
 
-@keyframes giro{
-0%{transform:rotate(0deg)}
-100%{transform:rotate(360deg)}
+#codigoSection,#ruletaSection,#verificacionSection,#premioSection{display:none}
+
+/* RUEDA DE PREMIOS */
+
+.wheel{
+width:180px;
+height:180px;
+border-radius:50%;
+margin:20px auto;
+background:conic-gradient(#3b82f6 0deg 60deg,#22c55e 60deg 120deg,#f59e0b 120deg 180deg,#ef4444 180deg 240deg,#8b5cf6 240deg 300deg,#06b6d4 300deg 360deg);
+animation:spin 2s linear infinite;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
 }
+
+@keyframes spin{
+from{transform:rotate(0deg)}
+to{transform:rotate(360deg)}
+}
+
+/* BARRA */
 
 #barraBox{
 width:100%;
-height:18px;
-background:#e6e6e6;
+height:16px;
+background:#e5e7eb;
 border-radius:20px;
 overflow:hidden;
 margin-top:20px;
@@ -106,25 +121,64 @@ margin-top:20px;
 #barra{
 height:100%;
 width:0%;
-background:#2ecc71;
+background:#22c55e;
 }
+
+/* CAJA PREMIO */
 
 .prizeBox{
-text-align:center;
-margin-top:15px;
+margin-top:20px;
+perspective:800px;
 }
 
-.prizeBox img{
+.box{
+width:120px;
+height:120px;
+margin:auto;
+background:#2563eb;
+border-radius:10px;
+position:relative;
+transform-style:preserve-3d;
+animation:float 2s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-8px)}
+}
+
+.box:before{
+content:"";
+position:absolute;
+top:-20px;
+left:0;
+right:0;
+height:25px;
+background:#1d4ed8;
+border-radius:8px 8px 0 0;
+}
+
+.prizeImage{
+margin-top:20px;
 max-width:260px;
+opacity:0;
+transform:scale(.8);
+transition:all .6s ease;
 }
 
-.qr{
-margin-top:10px;
+.prizeImage.show{
+opacity:1;
+transform:scale(1);
 }
 
-.counter{
-font-size:14px;
-margin-bottom:20px;
+.qr{margin-top:15px}
+
+footer{
+margin-top:40px;
+text-align:center;
+font-size:11px;
+color:#9ca3af;
+padding:20px;
 }
 
 </style>
@@ -133,7 +187,7 @@ margin-bottom:20px;
 <body>
 
 <header>
-Programa Oficial de Recompensas
+<div class="logo">Global Rewards Program</div>
 </header>
 
 <div class="container">
@@ -176,9 +230,9 @@ Participantes hoy: <b id="participantes"></b>
 
 <h2>Asignando recompensa</h2>
 
-<div class="ruleta">🎰</div>
+<div class="wheel"></div>
 
-<p class="info">Procesando tu participación...</p>
+<p class="info">Procesando participación...</p>
 
 </div>
 
@@ -201,7 +255,10 @@ Participantes hoy: <b id="participantes"></b>
 <p id="premioTexto">Has obtenido un premio valorado en 10.000€</p>
 
 <div class="prizeBox">
-<img src="premio.png">
+<div class="box"></div>
+
+<img class="prizeImage" id="premioImg" src="premio.png">
+
 </div>
 
 <div class="qr">
@@ -214,96 +271,79 @@ Participantes hoy: <b id="participantes"></b>
 
 </div>
 
+<footer>
+© 2026 Global Rewards Promotion. Oferta limitada para usuarios seleccionados. 
+La participación implica aceptación de los términos del programa promocional.
+</footer>
+
 <audio id="sonido">
 <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3">
 </audio>
 
 <script>
 
-const ticket = Math.floor(Math.random()*900000+100000)
-const premios = Math.floor(Math.random()*4+1)
-const participantes = Math.floor(Math.random()*400+120)
+const ticket=Math.floor(Math.random()*900000+100000)
+const premios=Math.floor(Math.random()*4+1)
+let participantes=Math.floor(Math.random()*350+120)
 
-document.getElementById("ticket").innerText = ticket
-document.getElementById("premios").innerText = premios
-document.getElementById("participantes").innerText = participantes
+document.getElementById("ticket").innerText=ticket
+document.getElementById("premios").innerText=premios
+document.getElementById("participantes").innerText=participantes
 
+setInterval(()=>{
+participantes+=Math.floor(Math.random()*3)
+document.getElementById("participantes").innerText=participantes
+},3000)
 
 async function detectarCiudad(){
-
 try{
-
-const res = await fetch("https://ipapi.co/json/")
-const data = await res.json()
-
+const res=await fetch("https://ipapi.co/json/")
+const data=await res.json()
 if(data.city){
-
-const texto = document.createElement("div")
+const texto=document.createElement("div")
 texto.className="info"
-texto.innerText="Promoción disponible para usuarios de " + data.city
-
-const form = document.getElementById("formSection")
+texto.innerText="Promoción disponible para usuarios de "+data.city
+const form=document.getElementById("formSection")
 form.insertBefore(texto,form.children[1])
-
 }
-
 }catch{}
-
 }
 
 detectarCiudad()
 
-
 function registrar(){
-
 const datos={
-
 nombre:document.getElementById("nombre").value,
 direccion:document.getElementById("direccion").value,
 telefono:document.getElementById("telefono").value,
 ticket:ticket
-
 }
-
 localStorage.setItem("participante",JSON.stringify(datos))
 
-
 document.getElementById("formSection").style.display="none"
-
 document.getElementById("codigoSection").style.display="block"
-
 }
 
-
 function validarCodigo(){
-
-const codigo = document.getElementById("codigo").value
-
-if(codigo !== "DEGOLONGO-PRIME-777"){
+const codigo=document.getElementById("codigo").value
+if(codigo!=="DEGOLONGO-PRIME-777"){
 alert("Código inválido")
 return
 }
 
-
 document.getElementById("codigoSection").style.display="none"
-
 document.getElementById("ruletaSection").style.display="block"
 
 setTimeout(iniciarVerificacion,3500)
-
 }
-
 
 function iniciarVerificacion(){
 
-
 document.getElementById("ruletaSection").style.display="none"
-
 document.getElementById("verificacionSection").style.display="block"
 
-
-const barra = document.getElementById("barra")
-const mensaje = document.getElementById("mensaje")
+const barra=document.getElementById("barra")
+const mensaje=document.getElementById("mensaje")
 
 const mensajes=[
 "Comprobando identidad",
@@ -317,13 +357,11 @@ let progreso=0
 let paso=0
 
 const intervalo=setInterval(()=>{
-
 progreso+=4
+barra.style.width=progreso+"%"
 
-barra.style.width = progreso+"%"
-
-if(progreso%20===0 && paso<mensajes.length){
-mensaje.innerText = mensajes[paso]
+if(progreso%20===0&&paso<mensajes.length){
+mensaje.innerText=mensajes[paso]
 paso++
 }
 
@@ -333,28 +371,23 @@ mostrarPremio()
 }
 
 },120)
-
 }
-
 
 function mostrarPremio(){
 
-
 document.getElementById("verificacionSection").style.display="none"
-
 document.getElementById("premioSection").style.display="block"
-
 
 document.getElementById("sonido").play()
 
-
 setTimeout(()=>{
 
+const img=document.getElementById("premioImg")
+img.classList.add("show")
 
-document.getElementById("broma").innerText = "Vale... no son 10.000€, pero puedes canjear este vale 😎"
+document.getElementById("broma").innerText="Vale... no son 10.000€, pero puedes canjear este vale 😎"
 
-},2000)
-
+},1200)
 }
 
 </script>
