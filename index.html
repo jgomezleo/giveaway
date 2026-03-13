@@ -2,60 +2,91 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Promoción Exclusiva 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programa Oficial de Recompensas 2026</title>
 
 <style>
 
 body{
-font-family:Arial;
-background:linear-gradient(135deg,#1d3557,#457b9d);
-color:white;
-text-align:center;
+font-family: "Segoe UI", Arial, sans-serif;
+background:#f4f6f9;
 margin:0;
+color:#2c3e50;
+}
+
+header{
+background:#0a2540;
+color:white;
+padding:20px;
+text-align:center;
+font-size:22px;
+font-weight:600;
 }
 
 .container{
-margin-top:60px;
+max-width:420px;
+margin:40px auto;
 }
 
 .card{
 background:white;
-color:black;
-width:350px;
-margin:auto;
-padding:25px;
-border-radius:10px;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
+border-radius:12px;
+padding:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h2{
+margin-top:0;
 }
 
 input{
-display:block;
-width:90%;
-margin:10px auto;
-padding:10px;
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:6px;
+border:1px solid #ddd;
+font-size:14px;
 }
 
 button{
-padding:10px 20px;
-background:#e63946;
+width:100%;
+padding:12px;
+margin-top:15px;
+background:#0077ff;
 border:none;
 color:white;
-font-weight:bold;
+font-weight:600;
+border-radius:6px;
 cursor:pointer;
-border-radius:5px;
 }
 
 button:hover{
-background:#c1121f;
+background:#005fd1;
+}
+
+.info{
+font-size:14px;
+color:#777;
+margin-bottom:15px;
+}
+
+.badge{
+background:#e8f1ff;
+padding:8px 12px;
+border-radius:20px;
+font-size:13px;
+display:inline-block;
+margin-bottom:10px;
 }
 
 #codigoSection,#ruletaSection,#verificacionSection,#premioSection{
 display:none;
 }
 
-#ruleta{
-font-size:40px;
-animation:giro 0.8s infinite linear;
+.ruleta{
+font-size:60px;
+animation:giro 1s linear infinite;
+text-align:center;
 }
 
 @keyframes giro{
@@ -63,13 +94,13 @@ animation:giro 0.8s infinite linear;
 100%{transform:rotate(360deg)}
 }
 
-#barraContainer{
-width:300px;
-height:20px;
-background:#ccc;
-margin:20px auto;
-border-radius:10px;
+#barraBox{
+width:100%;
+height:18px;
+background:#e6e6e6;
+border-radius:20px;
 overflow:hidden;
+margin-top:20px;
 }
 
 #barra{
@@ -78,9 +109,22 @@ width:0%;
 background:#2ecc71;
 }
 
-img{
-margin-top:20px;
-max-width:300px;
+.prizeBox{
+text-align:center;
+margin-top:15px;
+}
+
+.prizeBox img{
+max-width:260px;
+}
+
+.qr{
+margin-top:10px;
+}
+
+.counter{
+font-size:14px;
+margin-bottom:20px;
 }
 
 </style>
@@ -88,52 +132,62 @@ max-width:300px;
 
 <body>
 
-<div class="container">
+<header>
+Programa Oficial de Recompensas
+</header>
 
-<h1>🎁 PROMOCIÓN EXCLUSIVA 🎁</h1>
-<p>Quedan <b id="premiosRestantes"></b> premios disponibles</p>
+<div class="container">
 
 <div class="card" id="formSection">
 
-<h3>Registro de participante</h3>
+<div class="badge">Promoción verificada</div>
 
-<p>Participación Nº <b id="ticket"></b></p>
+<h2>Registro de participante</h2>
+
+<div class="counter">
+Participación Nº <b id="ticket"></b><br>
+Premios disponibles en tu zona: <b id="premios"></b><br>
+Participantes hoy: <b id="participantes"></b>
+</div>
 
 <input id="nombre" placeholder="Nombre completo">
 <input id="direccion" placeholder="Dirección">
 <input id="telefono" placeholder="Teléfono">
 
-<button onclick="enviarDatos()">Participar</button>
+<button onclick="registrar()">Confirmar participación</button>
 
 </div>
 
 
 <div class="card" id="codigoSection">
 
-<h3>Introduce tu código ganador</h3>
+<h2>Validar código de recompensa</h2>
+
+<p class="info">Introduce el código recibido para comprobar tu premio.</p>
 
 <input id="codigo" placeholder="Código promocional">
-<button onclick="verificarCodigo()">Validar código</button>
+
+<button onclick="validarCodigo()">Verificar código</button>
 
 </div>
 
 
 <div class="card" id="ruletaSection">
 
-<h3>Seleccionando premio...</h3>
+<h2>Asignando recompensa</h2>
 
-<div id="ruleta">🎰</div>
+<div class="ruleta">🎰</div>
 
-<p>Procesando participación...</p>
+<p class="info">Procesando tu participación...</p>
 
 </div>
 
 
 <div class="card" id="verificacionSection">
 
-<h3 id="mensaje">Verificando datos...</h3>
+<h2 id="mensaje">Verificando identidad...</h2>
 
-<div id="barraContainer">
+<div id="barraBox">
 <div id="barra"></div>
 </div>
 
@@ -142,36 +196,67 @@ max-width:300px;
 
 <div class="card" id="premioSection">
 
-<h1>🎊 ¡FELICIDADES! 🎊</h1>
+<h2>🎉 Premio confirmado</h2>
 
-<p>Has ganado un premio valorado en <b>10.000€</b></p>
+<p id="premioTexto">Has obtenido un premio valorado en 10.000€</p>
+
+<div class="prizeBox">
+<img src="premio.png">
+</div>
+
+<div class="qr">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=vale-premio" />
+</div>
 
 <p id="broma"></p>
 
-<img src="premio.png">
-
 </div>
 
 </div>
 
-
-<audio id="jackpot">
+<audio id="sonido">
 <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3">
 </audio>
-
 
 <script>
 
 const ticket = Math.floor(Math.random()*900000+100000)
+const premios = Math.floor(Math.random()*4+1)
+const participantes = Math.floor(Math.random()*400+120)
+
 document.getElementById("ticket").innerText = ticket
+document.getElementById("premios").innerText = premios
+document.getElementById("participantes").innerText = participantes
 
-const premios = Math.floor(Math.random()*5+2)
-document.getElementById("premiosRestantes").innerText = premios
+
+async function detectarCiudad(){
+
+try{
+
+const res = await fetch("https://ipapi.co/json/")
+const data = await res.json()
+
+if(data.city){
+
+const texto = document.createElement("div")
+texto.className="info"
+texto.innerText="Promoción disponible para usuarios de " + data.city
+
+const form = document.getElementById("formSection")
+form.insertBefore(texto,form.children[1])
+
+}
+
+}catch{}
+
+}
+
+detectarCiudad()
 
 
-function enviarDatos(){
+function registrar(){
 
-const datos = {
+const datos={
 
 nombre:document.getElementById("nombre").value,
 direccion:document.getElementById("direccion").value,
@@ -182,48 +267,50 @@ ticket:ticket
 
 localStorage.setItem("participante",JSON.stringify(datos))
 
+
 document.getElementById("formSection").style.display="none"
+
 document.getElementById("codigoSection").style.display="block"
 
 }
 
 
-function verificarCodigo(){
+function validarCodigo(){
 
 const codigo = document.getElementById("codigo").value
 
 if(codigo !== "DEGOLONGO-PRIME-777"){
-
-alert("Código incorrecto")
-
+alert("Código inválido")
 return
-
 }
 
+
 document.getElementById("codigoSection").style.display="none"
+
 document.getElementById("ruletaSection").style.display="block"
 
-setTimeout(iniciarVerificacion,3000)
+setTimeout(iniciarVerificacion,3500)
 
 }
 
 
 function iniciarVerificacion(){
 
+
 document.getElementById("ruletaSection").style.display="none"
+
 document.getElementById("verificacionSection").style.display="block"
+
 
 const barra = document.getElementById("barra")
 const mensaje = document.getElementById("mensaje")
 
 const mensajes=[
-
-"Validando identidad...",
-"Consultando base de datos internacional...",
-"Comprobando elegibilidad...",
-"Confirmando premio...",
-"Preparando recompensa..."
-
+"Comprobando identidad",
+"Consultando base de datos",
+"Verificando elegibilidad",
+"Confirmando premio",
+"Generando vale"
 ]
 
 let progreso=0
@@ -231,39 +318,40 @@ let paso=0
 
 const intervalo=setInterval(()=>{
 
-progreso+=5
-barra.style.width=progreso+"%"
+progreso+=4
+
+barra.style.width = progreso+"%"
 
 if(progreso%20===0 && paso<mensajes.length){
-
-mensaje.innerText=mensajes[paso]
+mensaje.innerText = mensajes[paso]
 paso++
-
 }
 
 if(progreso>=100){
-
 clearInterval(intervalo)
-
 mostrarPremio()
-
 }
 
-},150)
+},120)
 
 }
 
 
 function mostrarPremio(){
 
+
 document.getElementById("verificacionSection").style.display="none"
+
 document.getElementById("premioSection").style.display="block"
 
-document.getElementById("jackpot").play()
+
+document.getElementById("sonido").play()
+
 
 setTimeout(()=>{
 
-document.getElementById("broma").innerText="(Vale... no son 10.000€, pero tienes este vale 😎)"
+
+document.getElementById("broma").innerText = "Vale... no son 10.000€, pero puedes canjear este vale 😎"
 
 },2000)
 
