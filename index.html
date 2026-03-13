@@ -2,83 +2,102 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Gran Sorteo Anual</title>
+<title>Promoción Exclusiva 2026</title>
 
 <style>
 
 body{
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg,#2c3e50,#3498db);
-    color:white;
-    text-align:center;
-    margin:0;
-    padding:0;
+font-family:Arial;
+background:linear-gradient(135deg,#1d3557,#457b9d);
+color:white;
+text-align:center;
+margin:0;
 }
 
 .container{
-    margin-top:80px;
+margin-top:60px;
+}
+
+.card{
+background:white;
+color:black;
+width:350px;
+margin:auto;
+padding:25px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
 input{
-    display:block;
-    margin:10px auto;
-    padding:10px;
-    width:250px;
-    border:none;
-    border-radius:5px;
+display:block;
+width:90%;
+margin:10px auto;
+padding:10px;
 }
 
 button{
-    padding:10px 20px;
-    border:none;
-    border-radius:5px;
-    background:#f1c40f;
-    font-weight:bold;
-    cursor:pointer;
+padding:10px 20px;
+background:#e63946;
+border:none;
+color:white;
+font-weight:bold;
+cursor:pointer;
+border-radius:5px;
 }
 
 button:hover{
-    background:#f39c12;
+background:#c1121f;
 }
 
-#codigoSection,
-#verificandoSection,
-#premioSection{
-    display:none;
+#codigoSection,#ruletaSection,#verificacionSection,#premioSection{
+display:none;
+}
+
+#ruleta{
+font-size:40px;
+animation:giro 0.8s infinite linear;
+}
+
+@keyframes giro{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
+}
+
+#barraContainer{
+width:300px;
+height:20px;
+background:#ccc;
+margin:20px auto;
+border-radius:10px;
+overflow:hidden;
 }
 
 #barra{
-    width:0%;
-    height:25px;
-    background:#2ecc71;
-}
-
-#contenedorBarra{
-    width:300px;
-    margin:20px auto;
-    background:#555;
-    border-radius:5px;
-    overflow:hidden;
+height:100%;
+width:0%;
+background:#2ecc71;
 }
 
 img{
-    margin-top:30px;
-    max-width:350px;
+margin-top:20px;
+max-width:300px;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>🎉 Gran Sorteo Promocional 🎉</h1>
+<h1>🎁 PROMOCIÓN EXCLUSIVA 🎁</h1>
+<p>Quedan <b id="premiosRestantes"></b> premios disponibles</p>
 
-<div id="formSection">
+<div class="card" id="formSection">
 
-<h2>Registro de participante</h2>
+<h3>Registro de participante</h3>
+
+<p>Participación Nº <b id="ticket"></b></p>
 
 <input id="nombre" placeholder="Nombre completo">
 <input id="direccion" placeholder="Dirección">
@@ -89,32 +108,45 @@ img{
 </div>
 
 
-<div id="codigoSection">
+<div class="card" id="codigoSection">
 
-<h2>Introduce tu código de premio</h2>
+<h3>Introduce tu código ganador</h3>
 
 <input id="codigo" placeholder="Código promocional">
-<button onclick="comprobarCodigo()">Canjear premio</button>
+<button onclick="verificarCodigo()">Validar código</button>
 
 </div>
 
 
-<div id="verificandoSection">
+<div class="card" id="ruletaSection">
 
-<h2 id="mensajeVerificacion">Verificando datos...</h2>
+<h3>Seleccionando premio...</h3>
 
-<div id="contenedorBarra">
+<div id="ruleta">🎰</div>
+
+<p>Procesando participación...</p>
+
+</div>
+
+
+<div class="card" id="verificacionSection">
+
+<h3 id="mensaje">Verificando datos...</h3>
+
+<div id="barraContainer">
 <div id="barra"></div>
 </div>
 
 </div>
 
 
-<div id="premioSection">
+<div class="card" id="premioSection">
 
 <h1>🎊 ¡FELICIDADES! 🎊</h1>
 
-<p>Has ganado el siguiente premio:</p>
+<p>Has ganado un premio valorado en <b>10.000€</b></p>
+
+<p id="broma"></p>
 
 <img src="premio.png">
 
@@ -123,85 +155,117 @@ img{
 </div>
 
 
+<audio id="jackpot">
+<source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3">
+</audio>
+
+
 <script>
+
+const ticket = Math.floor(Math.random()*900000+100000)
+document.getElementById("ticket").innerText = ticket
+
+const premios = Math.floor(Math.random()*5+2)
+document.getElementById("premiosRestantes").innerText = premios
+
 
 function enviarDatos(){
 
-    const nombre = document.getElementById("nombre").value
-    const direccion = document.getElementById("direccion").value
-    const telefono = document.getElementById("telefono").value
+const datos = {
 
-    const datos = {
-        nombre,
-        direccion,
-        telefono
-    }
+nombre:document.getElementById("nombre").value,
+direccion:document.getElementById("direccion").value,
+telefono:document.getElementById("telefono").value,
+ticket:ticket
 
-    localStorage.setItem("datosParticipante", JSON.stringify(datos))
+}
 
-    document.getElementById("formSection").style.display="none"
-    document.getElementById("codigoSection").style.display="block"
+localStorage.setItem("participante",JSON.stringify(datos))
+
+document.getElementById("formSection").style.display="none"
+document.getElementById("codigoSection").style.display="block"
 
 }
 
 
-function comprobarCodigo(){
+function verificarCodigo(){
 
-    const codigo = document.getElementById("codigo").value
+const codigo = document.getElementById("codigo").value
 
-    if(codigo !== "DEGOLONGO-PRIME-777"){
-        alert("Código incorrecto")
-        return
-    }
+if(codigo !== "DEGOLONGO-PRIME-777"){
 
-    document.getElementById("codigoSection").style.display="none"
-    document.getElementById("verificandoSection").style.display="block"
+alert("Código incorrecto")
 
-    iniciarVerificacion()
+return
+
+}
+
+document.getElementById("codigoSection").style.display="none"
+document.getElementById("ruletaSection").style.display="block"
+
+setTimeout(iniciarVerificacion,3000)
 
 }
 
 
 function iniciarVerificacion(){
 
-    const mensajes = [
-        "Validando identidad...",
-        "Comprobando base de datos internacional...",
-        "Verificando elegibilidad...",
-        "Confirmando premio...",
-        "Preparando recompensa..."
-    ]
+document.getElementById("ruletaSection").style.display="none"
+document.getElementById("verificacionSection").style.display="block"
 
-    let progreso = 0
-    let pasoMensaje = 0
+const barra = document.getElementById("barra")
+const mensaje = document.getElementById("mensaje")
 
-    const barra = document.getElementById("barra")
-    const mensaje = document.getElementById("mensajeVerificacion")
+const mensajes=[
 
-    const intervalo = setInterval(() => {
+"Validando identidad...",
+"Consultando base de datos internacional...",
+"Comprobando elegibilidad...",
+"Confirmando premio...",
+"Preparando recompensa..."
 
-        progreso += 5
-        barra.style.width = progreso + "%"
+]
 
-        if(progreso % 20 === 0 && pasoMensaje < mensajes.length){
-            mensaje.innerText = mensajes[pasoMensaje]
-            pasoMensaje++
-        }
+let progreso=0
+let paso=0
 
-        if(progreso >= 100){
-            clearInterval(intervalo)
-            mostrarPremio()
-        }
+const intervalo=setInterval(()=>{
 
-    },150)
+progreso+=5
+barra.style.width=progreso+"%"
+
+if(progreso%20===0 && paso<mensajes.length){
+
+mensaje.innerText=mensajes[paso]
+paso++
+
+}
+
+if(progreso>=100){
+
+clearInterval(intervalo)
+
+mostrarPremio()
+
+}
+
+},150)
 
 }
 
 
 function mostrarPremio(){
 
-    document.getElementById("verificandoSection").style.display="none"
-    document.getElementById("premioSection").style.display="block"
+document.getElementById("verificacionSection").style.display="none"
+document.getElementById("premioSection").style.display="block"
+
+document.getElementById("jackpot").play()
+
+setTimeout(()=>{
+
+document.getElementById("broma").innerText="(Vale... no son 10.000€, pero tienes este vale 😎)"
+
+},2000)
 
 }
 
