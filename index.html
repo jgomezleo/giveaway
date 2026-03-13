@@ -208,7 +208,7 @@ Participantes hoy: <b id="participantes"></b>
 <input id="direccion" placeholder="Dirección">
 <input id="telefono" placeholder="Teléfono">
 
-<button onclick="registrar()">Confirmar</button>
+<button onclick="registrar()">Confirmar participación</button>
 
 </div>
 
@@ -217,7 +217,7 @@ Participantes hoy: <b id="participantes"></b>
 
 <h2>Validar código de recompensa</h2>
 
-<p class="info">Introduce el código recibido para comprobar tu regalo</p>
+<p class="info">Introduce el código recibido para comprobar tu premio.</p>
 
 <input id="codigo" placeholder="Código promocional">
 
@@ -239,7 +239,7 @@ Participantes hoy: <b id="participantes"></b>
 
 <div class="card" id="verificacionSection">
 
-<h2 id="mensaje">Verificando mamut...</h2>
+<h2 id="mensaje">Verificando identidad...</h2>
 
 <div id="barraBox">
 <div id="barra"></div>
@@ -250,9 +250,9 @@ Participantes hoy: <b id="participantes"></b>
 
 <div class="card" id="premioSection">
 
-<h2>Regalo confirmado</h2>
+<h2>🎉 Premio confirmado</h2>
 
-<p id="premioTexto">Has obtenido un premio valorado en 127 juegos de Nintendo Switch y Nintendo Switch 2</p>
+<p id="premioTexto">Has obtenido un premio valorado en 10.000€</p>
 
 <div class="prizeBox">
 <div class="box"></div>
@@ -260,6 +260,8 @@ Participantes hoy: <b id="participantes"></b>
 <img class="prizeImage" id="premioImg" src="premio.png">
 
 </div>
+
+
 
 <p id="broma"></p>
 
@@ -298,7 +300,7 @@ const data=await res.json()
 if(data.city){
 const texto=document.createElement("div")
 texto.className="info"
-texto.innerText="Promoción solo disponible para usuarios de "+data.city
+texto.innerText="Promoción disponible para usuarios de "+data.city
 const form=document.getElementById("formSection")
 form.insertBefore(texto,form.children[1])
 }
@@ -322,7 +324,7 @@ document.getElementById("codigoSection").style.display="block"
 
 function validarCodigo(){
 const codigo=document.getElementById("codigo").value
-if(codigo!=="DEGOLONGO-PRIME-777"){
+if(codigo!=="mamut"){
 alert("Código inválido")
 return
 }
@@ -342,10 +344,10 @@ const barra=document.getElementById("barra")
 const mensaje=document.getElementById("mensaje")
 
 const mensajes=[
-"Comprobando mamutiano",
+"Comprobando mamut",
 "Consultando base de datos",
-"Verificando",
-"Gilipollas",
+"Gilipollas confirmado",
+"Bienvenido, gilipollas",
 "Generando regalo"
 ]
 
@@ -361,8 +363,8 @@ mensaje.innerText=mensajes[paso]
 paso++
 }
 
-if(progreso>=1000){
-clearInterval(intervalo
+if(progreso>=100){
+clearInterval(intervalo)
 mostrarPremio()
 }
 
@@ -381,7 +383,7 @@ setTimeout(()=>{
 const img=document.getElementById("premioImg")
 img.classList.add("show")
 
-document.getElementById("broma").innerText="Gilipollas"
+document.getElementById("broma").innerText="Vale... no son 10.000€, pero puedes canjear este vale 😎"
 
 },1200)
 }
